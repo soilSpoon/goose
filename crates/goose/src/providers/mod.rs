@@ -5,6 +5,7 @@ pub mod avian;
 pub mod azure;
 pub mod azureauth;
 pub mod base;
+#[cfg(feature = "aws-providers")]
 pub mod bedrock;
 pub mod canonical;
 pub mod catalog;
@@ -27,6 +28,7 @@ pub mod google;
 mod init;
 pub mod lead_worker;
 pub mod litellm;
+#[cfg(feature = "local-inference")]
 pub mod local_inference;
 pub mod nanogpt;
 pub mod oauth;
@@ -37,6 +39,7 @@ pub mod openrouter;
 pub mod provider_registry;
 pub mod provider_test;
 mod retry;
+#[cfg(feature = "aws-providers")]
 pub mod sagemaker_tgi;
 pub mod snowflake;
 pub mod testprovider;

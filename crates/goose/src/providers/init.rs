@@ -5,7 +5,6 @@ use super::{
     avian::AvianProvider,
     azure::AzureProvider,
     base::{Provider, ProviderMetadata},
-    bedrock::BedrockProvider,
     chatgpt_codex::ChatGptCodexProvider,
     claude_acp::ClaudeAcpProvider,
     claude_code::ClaudeCodeProvider,
@@ -19,18 +18,22 @@ use super::{
     google::GoogleProvider,
     lead_worker::LeadWorkerProvider,
     litellm::LiteLLMProvider,
-    local_inference::LocalInferenceProvider,
     nanogpt::NanoGptProvider,
     ollama::OllamaProvider,
     openai::OpenAiProvider,
     openrouter::OpenRouterProvider,
     provider_registry::ProviderRegistry,
-    sagemaker_tgi::SageMakerTgiProvider,
     snowflake::SnowflakeProvider,
     tetrate::TetrateProvider,
     venice::VeniceProvider,
     xai::XaiProvider,
 };
+#[cfg(feature = "aws-providers")]
+use super::bedrock::BedrockProvider;
+#[cfg(feature = "local-inference")]
+use super::local_inference::LocalInferenceProvider;
+#[cfg(feature = "aws-providers")]
+use super::sagemaker_tgi::SageMakerTgiProvider;
 use crate::config::ExtensionConfig;
 use crate::model::ModelConfig;
 use crate::providers::base::ProviderType;
@@ -52,7 +55,9 @@ async fn init_registry() -> RwLock<ProviderRegistry> {
         registry.register::<AnthropicProvider>(true);
         registry.register::<AvianProvider>(false);
         registry.register::<AzureProvider>(false);
+        #[cfg(feature = "aws-providers")]
         registry.register::<BedrockProvider>(false);
+        #[cfg(feature = "local-inference")]
         registry.register::<LocalInferenceProvider>(false);
         registry.register::<ChatGptCodexProvider>(true);
         registry.register::<ClaudeAcpProvider>(false);
@@ -70,6 +75,7 @@ async fn init_registry() -> RwLock<ProviderRegistry> {
         registry.register::<OllamaProvider>(true);
         registry.register::<OpenAiProvider>(true);
         registry.register::<OpenRouterProvider>(true);
+        #[cfg(feature = "aws-providers")]
         registry.register::<SageMakerTgiProvider>(false);
         registry.register::<SnowflakeProvider>(false);
         registry.register::<TetrateProvider>(true);
